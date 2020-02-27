@@ -2,17 +2,17 @@ import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 
-import MainWorker from "./worker/main.worker";
+/* eslint-disable import/no-webpack-loader-syntax */
+// @ts-ignore
+import Worker from "workerize-loader!./worker/main";
 
 class App extends Component {
   componentDidMount() {
-    const worker = new MainWorker();
+    const worker = Worker();
 
-    worker.onmessage = () => {
-      console.log("Got a worker message");
-    };
-
-    worker.postMessage("");
+    worker.expensive(1000).then((count: number) => {
+      console.log(`Ran ${count} loops`);
+    });
   }
   render() {
     return (
